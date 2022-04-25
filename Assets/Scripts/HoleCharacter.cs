@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class HoleCharacter : MonoBehaviour
 {
+    [Header("Gameobjects")]
     [SerializeField] GameObject MainCamera;
+    [SerializeField] GameObject HoleMesh;
 
     [Header("Hole Stats")]
-    [SerializeField] GameObject HoleMesh;
     [SerializeField] float MovementSpeed = 1f;
 
     private void FixedUpdate()
     {
-        MoveHole();
+        if(LevelManager.Instance.IsGameRunning())
+            MoveHole();
     }
 
     void MoveHole()
     {
+        //Replace Input.GetAxis with joystick axes when porting to mobile
         float x = Input.GetAxis("Horizontal") * MovementSpeed * Time.fixedDeltaTime;
         float z = Input.GetAxis("Vertical") * MovementSpeed * Time.fixedDeltaTime;
 
