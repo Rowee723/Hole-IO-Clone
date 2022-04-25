@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HoleManager : MonoBehaviour
 {
+    public static HoleManager Instance { get; private set; }
+
     [Header("Ground")]
     [SerializeField] GameObject GroundMesh;
     [SerializeField] PolygonCollider2D Ground2DCollider;
@@ -15,6 +17,15 @@ public class HoleManager : MonoBehaviour
     [SerializeField] float HoleSize = 1f;
 
     Mesh Ground3DMesh;
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(this);
+    }
 
     private void FixedUpdate()
     {
@@ -57,6 +68,20 @@ public class HoleManager : MonoBehaviour
 
         Ground3DMesh = Ground2DCollider.CreateMesh(true, true);
         Ground3DCollider.sharedMesh = Ground3DMesh;
+    }
+
+    public void CreateMap(int size, Color color)
+    {
+        Vector2[] points = Ground2DCollider.points;
+
+        GroundMesh.transform.localScale = new Vector3(size, 1, size);
+
+        for(int i = 0; i < points.Length; i++)
+        {
+            points[i] = new Vector2(size, size);
+        }
+
+        GroundMesh.GetComponent<MeshRenderer>().sharedMaterial.color = color;
     }
 
     public IEnumerator LevelUpHole()

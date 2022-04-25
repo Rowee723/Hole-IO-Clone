@@ -6,16 +6,16 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
-    [Header("Managers")]
-    [SerializeField] HUD HUDManager;
-    [SerializeField] HoleManager HoleManager;
+    [Header("Spawn Properties")]
+    [SerializeField] GameObject World;
+    [SerializeField] GameObject BlockPrefab;
 
     [Header("Level Properties")]
     [SerializeField] float LevelTime = 100f;
-    [SerializeField] LevelProperties Properties;
+    [SerializeField] LevelProperties Settings;
 
-    int Points = 0;
-    int Level = 1;
+    public int Points { get; private set; }
+    private int Level = 1;
 
     bool RunGame = false;
 
@@ -28,6 +28,8 @@ public class LevelManager : MonoBehaviour
 
         Points = 0;
         Level = 1;
+
+        GenerateBlocks();
     }
 
     private void Update()
@@ -35,7 +37,7 @@ public class LevelManager : MonoBehaviour
         if (RunGame)
         {
             LevelTime -= Time.deltaTime;
-            HUDManager.UpdateTime(Mathf.RoundToInt(LevelTime));
+            HUD.Instance.UpdateTime(Mathf.RoundToInt(LevelTime));
 
             //If time's up then end game
             if(LevelTime <= 0)
@@ -46,19 +48,29 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void GenerateBlocks()
+    {
+        float range = (Settings.Size * 5) - 1;
+        for (int i = 0; i < Settings.Size * 10; i++)
+        {
+            GameObject newObj = Instantiate(BlockPrefab, World.transform);
+            newObj.transform.position = new Vector3(Random.Range(-range, range), 0.5f, Random.Range(-range, range));
+        }
+    }
+
     private void CheckPoints()
     {
         //Grow hole everytime it reaches its target points
         if(Points % (Level * 10) == 0)
         {
             Level++;
-            StartCoroutine(HoleManager.LevelUpHole());
+            StartCoroutine(HoleManager.Instance.LevelUpHole());
         }
     }
 
     private void EndLevel()
     {
-        HUDManager.ShowResultScreen(true);
+        HUD.Instance.ShowResultScreen(true);
     }
 
     public void StartLevel()
@@ -74,7 +86,17 @@ public class LevelManager : MonoBehaviour
     public void AddPoints(int amount)
     {
         Points += amount;
-        HUDManager.UpdatePoints(Points);
+        HUD.Instance.UpdatePoints(Points);
         CheckPoints();
+    }
+
+    public void GenerateMap()
+    {
+        HoleManager.Instance.CreateMap(Settings.Size, Settings.MapColor);
+    }
+
+    public LevelProperties GetSettings()
+    {
+        return Settings;
     }
 }

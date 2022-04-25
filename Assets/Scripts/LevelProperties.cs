@@ -5,9 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class LevelProperties
 {
-    [Tooltip("Use this to adjust the size of the map")]
-    [Range(0, 10)]
+    [Tooltip("Adjusts the size of the map")]
+    [Range(1, 10)]
     public int Size = 1;
 
-    public Color MapColor;
+    [Tooltip("Adjusts the color of the map")]
+    public Color MapColor = Color.white;
+
+    public LevelProperties()
+    {
+        Size = 1; 
+        MapColor = Color.white;
+    }
 }

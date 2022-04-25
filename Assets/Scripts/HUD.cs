@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class HUD : MonoBehaviour
 {
+    public static HUD Instance { get; private set; }
+
     [Header("Stats Text")]
     [SerializeField] Text Timer;
     [SerializeField] Text Points;
@@ -14,6 +16,15 @@ public class HUD : MonoBehaviour
     [SerializeField] GameObject MainHUD;
     [SerializeField] GameObject PauseScreen;
     [SerializeField] GameObject ResultScreen;
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(this);
+    }
 
     private void StopTime(bool stop)
     {
@@ -44,6 +55,9 @@ public class HUD : MonoBehaviour
         MainHUD.SetActive(!show);
         ResultScreen.SetActive(show);
         StopTime(show);
+
+        ResultScreen.transform.Find("Name").GetComponent<Text>().text = "Congrats, " + SystemManager.Instance.PlayerName + "!";
+        ResultScreen.transform.Find("Score").GetComponent<Text>().text = "Score: " + LevelManager.Instance.Points;
     }
 
     public void ReturnToMainMenu()

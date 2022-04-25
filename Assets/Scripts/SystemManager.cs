@@ -7,7 +7,7 @@ public class SystemManager : MonoBehaviour
 {
     public static SystemManager Instance { get; private set; }
 
-    private string PlayerName = "";
+    public string PlayerName { get; private set; }
 
     private void Awake()
     {
@@ -15,7 +15,8 @@ public class SystemManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        
+
+        PlayerName = "";
         DontDestroyOnLoad(this);
     }
 

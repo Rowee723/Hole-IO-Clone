@@ -11,17 +11,26 @@ public class LevelPropertiesDrawer : PropertyDrawer
     {
         EditorGUI.BeginProperty(position, label, property);
 
-        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-        var indent = EditorGUI.indentLevel;
-        EditorGUI.indentLevel = 0;
+        EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+        
+        var sizeRect = new Rect(position.x, position.y + 20, position.width, position.height / 5);
+        var colorRect = new Rect(position.x, position.y + 40, position.width, position.height / 5);
+        var buttonRect = new Rect(position.x, position.y + 70, position.width, position.height / 5);
 
-        var sizeRect = new Rect(position.x, position.y, 30, position.height);
-        var colorRect = new Rect(position.x + 35, position.y, 50, position.height);
+
         EditorGUI.PropertyField(sizeRect, property.FindPropertyRelative("Size"), new GUIContent("Size"));
         EditorGUI.PropertyField(colorRect, property.FindPropertyRelative("MapColor"), new GUIContent("Color"));
+        if (GUI.Button(buttonRect, "Create Map"))
+        {
+            LevelManager.Instance.GenerateMap();
+        }
 
-        EditorGUI.indentLevel = indent;
 
         EditorGUI.EndProperty();
+    }
+
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return base.GetPropertyHeight(property, label) * 5.0f;
     }
 }

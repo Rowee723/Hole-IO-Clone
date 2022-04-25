@@ -11,6 +11,13 @@ public class HoleCharacter : MonoBehaviour
     [Header("Hole Stats")]
     [SerializeField] float MovementSpeed = 1f;
 
+    private int WorldSize = 0;
+
+    private void Start()
+    {
+        WorldSize = LevelManager.Instance.GetSettings().Size * 5;
+    }
+
     private void FixedUpdate()
     {
         if(LevelManager.Instance.IsGameRunning())
@@ -31,6 +38,12 @@ public class HoleCharacter : MonoBehaviour
         
         camPos.x += x;
         camPos.z += z;
+
+        meshPos.x = Mathf.Clamp(meshPos.x, -WorldSize, WorldSize);
+        meshPos.z = Mathf.Clamp(meshPos.z, -WorldSize, WorldSize);
+
+        camPos.x = Mathf.Clamp(camPos.x, -WorldSize, WorldSize);
+        camPos.z = Mathf.Clamp(camPos.z, -WorldSize - 3, WorldSize - 3);
 
         HoleMesh.transform.position = meshPos;
         MainCamera.transform.position = camPos;
