@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SystemManager : MonoBehaviour
 {
@@ -25,8 +24,4 @@ public class SystemManager : MonoBehaviour
         PlayerName = newName;
     }
 
-    public void StartGame()
-    {
-        SceneManager.LoadScene("LevelScene");
-    }
 }

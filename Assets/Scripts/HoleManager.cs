@@ -23,8 +23,6 @@ public class HoleManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-
-        DontDestroyOnLoad(this);
     }
 
     private void FixedUpdate()
